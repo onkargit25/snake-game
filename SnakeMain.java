@@ -3,7 +3,9 @@ import javax.swing.JFrame;
 class SnakeOnScreen{
 
     void setSnakeOnScreen(Snake[] snake, int[][] screen, int snakeLength){
-        for(int i = 0; i < snakeLength ; i++){
+
+        screen[(snake[0]).y][snake[0].x] = 2;
+        for(int i = 1; i < snakeLength ; i++){
             screen[(snake[i]).y][snake[i].x] = 1;
         }
     }
@@ -61,7 +63,7 @@ class Food{
     }
 }
 
-class SnakeMain{
+public class SnakeMain{
     public static void main(String args[]){
 
 
@@ -78,17 +80,13 @@ class SnakeMain{
         final int SNAKE_BODY = 1;
         final int SNAKE_HEAD = 2;
         final int GRASS = 0;
+        final int FOOD = 3;
+
+        screen[3][3] = FOOD;
 
         SnakeOnScreen ss = new SnakeOnScreen();
         ss.setSnakeOnScreen(snake, screen, snakeLength);
 
-        for(int i = 0; i < 20; i++){
-            for(int j = 0; j < 20; j++){
-                System.out.print(screen[i][j]);
-            }
-
-            System.out.println();
-        }
         
 
         JFrame frame = new JFrame("Snake game");
