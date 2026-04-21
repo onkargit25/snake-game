@@ -1,22 +1,50 @@
 import javax.swing.JFrame;
+import java.time.*;
 
 class SnakeOnScreen{
 
     void setSnakeOnScreen(Snake[] snake, int[][] screen, int snakeLength){
 
+        for(int i = 0; i < screen.length; i++){
+            for(int j = 0; j < screen[0].length; j++){
+                if(screen[i][j] == 1){
+                    screen[i][j] = 0;
+                }
+            }
+        }
+
+
         screen[(snake[0]).y][snake[0].x] = 2;
         for(int i = 1; i < snakeLength ; i++){
             screen[(snake[i]).y][snake[i].x] = 1;
         }
+
+
     }
     
 
     SnakeOnScreen(){
     }
 }
+
+
+class MoveSnake{
+
+    void moveSnake(char direction, Snake[] snake, int snakeLength){
+
+        for(int i = (snakeLength -1); i >= 1; i--){
+            snake[i].y = snake[i-1].y;
+            snake[i].x = snake[i-1].x;
+        }
+
+        snake[0].move(direction);
+    }
+}
 class Snake{
     int x;
     int y;
+
+    void move(char direction){}
 
     Snake(int x, int y){
         this.x = x;
@@ -31,7 +59,7 @@ class SnakeHead extends Snake{
 
         switch(direction){
             case 'N':
-                this.y++;
+                this.y--;
                 break;
 
             case 'E':
@@ -39,7 +67,7 @@ class SnakeHead extends Snake{
                 break;
 
             case 'S':
-                this.y--;
+                this.y++;
                 break;
 
             case 'W':
@@ -87,6 +115,8 @@ public class SnakeMain{
         SnakeOnScreen ss = new SnakeOnScreen();
         ss.setSnakeOnScreen(snake, screen, snakeLength);
 
+        MoveSnake ms = new MoveSnake();
+
         
 
         JFrame frame = new JFrame("Snake game");
@@ -98,6 +128,16 @@ public class SnakeMain{
         frame.setSize(panel.screenWidth, panel.screenHeight);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null); // Centers the window
+        frame.setVisible(true);
+
+        char movingTo = 'S';
+
+
+        ms.moveSnake(movingTo, snake, snakeLength);
+        ss.setSnakeOnScreen(snake, screen, snakeLength);
+
+        panel = new SnakePanel(screen);
+        frame.add(panel);
         frame.setVisible(true);
 
 
