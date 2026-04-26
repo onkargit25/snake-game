@@ -1,5 +1,4 @@
 Next steps:
-- add game loop, frame rate
-- implement movement
-- handle input
-- figure out collision logic
+- self collision logic
+- food spawns
+- growth logic
