@@ -1,5 +1,4 @@
 import javax.swing.JFrame;
-import java.time.*;
 
 class SnakeOnScreen{
 
@@ -110,7 +109,8 @@ public class SnakeMain{
         final int GRASS = 0;
         final int FOOD = 3;
 
-        screen[3][3] = FOOD;
+        Food food = new Food();
+        screen[food.y][food.x] = FOOD;
 
         SnakeOnScreen ss = new SnakeOnScreen();
         ss.setSnakeOnScreen(snake, screen, snakeLength);
@@ -130,17 +130,34 @@ public class SnakeMain{
         frame.setLocationRelativeTo(null); // Centers the window
         frame.setVisible(true);
 
-        char movingTo = 'S';
+        
+        char input = 'E';
+
+        //the food needs to spawn on grass. Not where the snake exists already.
 
 
-        ms.moveSnake(movingTo, snake, snakeLength);
-        ss.setSnakeOnScreen(snake, screen, snakeLength);
+        
+        while(true){
 
-        panel = new SnakePanel(screen);
-        frame.add(panel);
-        frame.setVisible(true);
+            panel = new SnakePanel(screen);
+            frame.add(panel);
+            frame.setVisible(true);
 
+            try {
+                Thread.sleep(250);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            
+            if(panel.snakeMoved){
+                input = panel.getDirection();
+            }
+            
 
+            ms.moveSnake(input, snake, snakeLength);
+            ss.setSnakeOnScreen(snake, screen, snakeLength);
+
+        }
         
 
     }//end of main
