@@ -165,9 +165,13 @@ public class SnakeMain{
         
         while(true){
 
-            panel = new SnakePanel(screen);
-            frame.add(panel);
-            frame.setVisible(true);
+            for(int i = 0; i < 20; i++){
+                for(int j = 0; j < 20; j++){
+                    panel.screen[i][j] = screen[i][j];
+                }
+            }
+            panel.repaint();
+            
 
             try {
                 Thread.sleep(250);
