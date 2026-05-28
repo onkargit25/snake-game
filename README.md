@@ -1,4 +1,3 @@
-Next steps:
-- self collision logic
-- food spawns
-- growth logic
+Snake is complete
+
+improvement: new panel is being created for every frame. Use repaint instead.

@@ -11,13 +11,12 @@ class SnakeOnScreen{
                 }
             }
         }
-
+        
 
         screen[(snake[0]).y][snake[0].x] = 2;
         for(int i = 1; i < snakeLength ; i++){
             screen[(snake[i]).y][snake[i].x] = 1;
         }
-
 
     }
     
@@ -30,6 +29,7 @@ class SnakeOnScreen{
 class MoveSnake{
 
     void moveSnake(char direction, Snake[] snake, int snakeLength){
+
 
         for(int i = (snakeLength -1); i >= 1; i--){
             snake[i].y = snake[i-1].y;
@@ -84,9 +84,33 @@ class Food{
     int x;
     int y;
 
-    Food(){
-        this.x = ((int)(Math.random()*20));
-        this.y = ((int)(Math.random()*20));
+    Food(Snake[] snake,int snakeLength){
+
+        int xcoord = 0;
+        int ycoord = 0;
+
+        boolean validSpawn = false;
+
+        while(!validSpawn){
+            xcoord = ((int)(Math.random()*20));
+            ycoord = ((int)(Math.random()*20));
+
+            validSpawn = true;
+
+            for(int i = 0; i < snakeLength; i++){
+
+                if((xcoord== (snake[i]).x) && (ycoord == (snake[i]).y)){
+                    validSpawn = false;
+                    break;
+                }
+            }
+        }
+
+        this.x = xcoord;
+        this.y = ycoord;
+        
+
+
     }
 }
 
@@ -109,7 +133,7 @@ public class SnakeMain{
         final int GRASS = 0;
         final int FOOD = 3;
 
-        Food food = new Food();
+        Food food = new Food(snake, snakeLength);
         screen[food.y][food.x] = FOOD;
 
         SnakeOnScreen ss = new SnakeOnScreen();
@@ -136,6 +160,8 @@ public class SnakeMain{
         //the food needs to spawn on grass. Not where the snake exists already.
 
 
+        int downCountForExpansion = 1;
+        Snake tailSave = new Snake(0,0);
         
         while(true){
 
@@ -155,7 +181,43 @@ public class SnakeMain{
             
 
             ms.moveSnake(input, snake, snakeLength);
+
+            
+            //food eating logic
+            if(snake[0].x == food.x && snake[0].y == food.y){
+                    tailSave.x = snake[snakeLength - 1].x;
+                    tailSave.y = snake[snakeLength - 1].y;
+                    downCountForExpansion--;
+            }
+
+            if(downCountForExpansion == 0){
+                snake[snakeLength] = new Snake(tailSave.x, tailSave.y);
+                snakeLength++;
+                downCountForExpansion = 1;
+                food = new Food(snake, snakeLength);
+                screen[food.y][food.x] = FOOD;
+
+            }
+
+
+            boolean collision = false;
+
+            //self collision logic
+            for(int i = 1; i < snakeLength; i++){
+
+                if(snake[0].x == (snake[i].x) && (snake[0].y == snake[i].y)){
+                    collision = true;
+                    break;
+                }
+            }
+
+
+
             ss.setSnakeOnScreen(snake, screen, snakeLength);
+
+            if(collision){
+                break;
+            }
 
         }
         
